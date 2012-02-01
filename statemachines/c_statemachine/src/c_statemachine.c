@@ -21,15 +21,16 @@ void OnExit( int State);
 void TurnstileSM(int event);
 //------------------------------
 
+int tickcount=0;
+
 int main()
 {	// By sending hardcoded events to the SM, it is possible to
 	// simulate how it works.
-    TurnstileSM( TICK );
     TurnstileSM( PAYED );
-    TurnstileSM( PERSONPASSED);
+
 
     int i;
-    for(i=0;i<6;i++)
+    for(i=0;i<6;i++) TurnstileSM( TICK );
     /* In an actual system it would look more like this:
      *
      * while (1) {
@@ -49,9 +50,11 @@ void TurnstileSM( int event )
 {
     int NextState = TS_State;
 
-    switch( TS_State ) {
+    switch( TS_State )
+    {
         case LOCKED:
-            switch (event ) {
+            switch (event )
+            {
                 case PAYED:
                     NextState = UNLOCKED;
                     break;
@@ -63,20 +66,22 @@ void TurnstileSM( int event )
                   break;
             }
             break;
-          case UNLOCKED:
+        case UNLOCKED:
           switch (event)
           {
-          case PERSONPASSED:
-            NextState = LOCKED;
-            break;
-          case TICK:
-            if(TICK)
-            {
-                NextState = LOCKED;
-                break;
-            }
+            case PERSONPASSED:
+              NextState = LOCKED;
               break;
-          }
+            case TICK:
+              tickcount++;
+              printf("ticks counted %i\n",tickcount);
+              if(tickcount=5)
+                {
+                  NextState = LOCKED;
+                }
+              break;
+         }
+
             break;
         default:
             break;
