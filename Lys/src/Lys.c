@@ -59,6 +59,14 @@ lightcurve1(int event)
       NextState = RED;
       break;
       }
+    case RED:
+
+      switch (event)
+        {
+      case TICK:
+        NextState = RED;
+        break;
+        }
     break;
   default:
     break;
